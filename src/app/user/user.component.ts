@@ -1,46 +1,46 @@
-import { Component,computed,signal, Input, input, Output, EventEmitter, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  signal,
+  Input,
+  input,
+  Output,
+  EventEmitter,
+  output,
+} from '@angular/core';
 import { DUMMY_USERS } from '../dummy-users';
+import { type User } from './user.model';
 
 const randomUserIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+// Define a User type for better type safety
+// type User = {
+//   id: string;
+//   name: string;
+//   avatar: string;
+// };
+// Alternatively, you can define an interface
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [],
   templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  styleUrl: './user.component.css',
 })
 export class UserComponent {
-  @Input({required : true}) id!: string;
-  @Input({required : true}) avatar!: string; 
-  @Input({required : true}) name!: string;
+  // @Input({ required: true }) user!: {
+  //   id: string;
+  //   name: string;
+  //   avatar: string;
+  // };
+  @Input({ required: true }) user!: User;
+  @Input({ required: true }) selected!: boolean;
   get imagePath() {
-    return 'assets/users/' + this.avatar;
+    return 'assets/users/' + this.user.avatar;
   }
 
-  @Output() Select = new EventEmitter<string>();
-  //Select = output<string>();  
+  @Output() Select = new EventEmitter();
   onSelectUser() {
-    this.Select.emit(this.id);
+    this.Select.emit(this.user.id);
   }
-  //input properties as signals
-  // avatar= input.required<string>();
-  // name= input.required<string>();
-  // imagePath = computed(() => 'assets/users/' + this.avatar());  
-
-  
-
-
-  // selectedUser = signal(DUMMY_USERS[randomUserIndex]);
-  // imagePath = computed(() => 'assets/users/' + this.selectedUser().avatar);
-  // get imagePath() {
-  //   return 'assets/users/' + this.selectedUser.avatar;
-  // }
-
-   //onSelectUser() {
-  //   const randomIndex = Math.floor(Math.random() * DUMMY_USERS.length);
-  //   this.selectedUser.set(DUMMY_USERS[randomIndex]);
-  //   // Or alternatively:
-  //   //this.selectedUser = DUMMY_USERS[randomIndex];
-   //}
 }
